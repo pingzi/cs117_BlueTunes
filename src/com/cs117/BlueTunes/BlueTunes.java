@@ -72,6 +72,7 @@ public class BlueTunes extends Activity {
 
 	private Button findDevicesButton = null;
 	private Button playMusicButton = null;
+	private Button remoteMp3ModeButton = null;
 	
     // Name of the connected device
     private String mConnectedDeviceName = null;
@@ -119,6 +120,14 @@ public class BlueTunes extends Activity {
         Intent serverIntent = new Intent(this, DeviceListActivity.class);
         startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
     }
+    
+    public void remoteMp3Mode(View view)
+    {
+        // Launch the DeviceListActivity to see devices and do scan
+        Intent serverIntent = new Intent(this, RemoteMp3ModeActivity.class);
+        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+    }
+
     
     @Override
     public void onStart() {

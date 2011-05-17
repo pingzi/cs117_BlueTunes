@@ -47,6 +47,17 @@
 			android:text="Find Devices"
 			android:onClick="buttonPressed"
 			/>
+			
+			<Button
+			android:id="@+id/remotemp3mode"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_toRightOf="@+id/finddevices"
+			android:layout_marginLeft="10dp"
+			android:text="Remote mp3 Mode"
+			android:onClick="remoteMp3Mode"
+			/>
+			
 	</RelativeLayout>
 </RelativeLayout>
 
