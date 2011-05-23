@@ -45,7 +45,7 @@
 			android:layout_toRightOf="@+id/playmusic"
 			android:layout_marginLeft="10dp"
 			android:text="Find Devices"
-			android:onClick="buttonPressed"
+			android:onClick="findDevices"
 			/>
 			
 			<Button
