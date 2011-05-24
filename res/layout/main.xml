@@ -37,6 +37,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="Play Music"
+			android:onClick="playMusic"
 			/>
 		<Button
 			android:id="@+id/finddevices"
@@ -45,17 +46,23 @@
 			android:layout_toRightOf="@+id/playmusic"
 			android:layout_marginLeft="10dp"
 			android:text="Find Devices"
-			android:onClick="findDevices"
+			android:onClick="buttonPressed"
 			/>
 			
 			<Button
-			android:id="@+id/remotemp3mode"
+			android:id="@+id/quit"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_toRightOf="@+id/finddevices"
 			android:layout_marginLeft="10dp"
-			android:text="Remote mp3 Mode"
-			android:onClick="remoteMp3Mode"
+			android:text="Quit"
+			android:onClick="quit"
+			/>
+			
+			<TextView
+			android:id="@+id/state"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
 			/>
 			
 	</RelativeLayout>

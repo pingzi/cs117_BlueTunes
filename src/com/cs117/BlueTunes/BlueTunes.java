@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.os.Handler;
@@ -72,7 +73,7 @@ public class BlueTunes extends Activity {
 
 	private Button findDevicesButton = null;
 	private Button playMusicButton = null;
-	private Button remoteMp3ModeButton = null;
+	private Button quitButton = null;
 	
     // Name of the connected device
     private String mConnectedDeviceName = null;
@@ -86,6 +87,14 @@ public class BlueTunes extends Activity {
     private BluetoothChatService mChatService = null;
     
     private DeviceListActivity mDeviceList;
+    
+    MediaPlayer mediaPlayer;
+    TextView textState;
+
+    private int stateMediaPlayer;
+    private final int stateMP_NotStarter = 0;
+    private final int stateMP_Playing = 1;
+    private final int stateMP_Pausing = 2;
 
 
     @Override
@@ -110,24 +119,107 @@ public class BlueTunes extends Activity {
             finish();
             return;
         }
+        
+        playMusicButton = (Button)findViewById(R.id.playmusic);
+        quitButton = (Button)findViewById(R.id.quit);
+
+        textState = (TextView)findViewById(R.id.state);
+
+        initMediaPlayer();
 
     }
 
     
-    public void findDevices(View view)
+    public void buttonPressed(View view)
     {
         // Launch the DeviceListActivity to see devices and do scan
         Intent serverIntent = new Intent(this, DeviceListActivity.class);
         startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
     }
-    
-    public void remoteMp3Mode(View view)
+
+    private void initMediaPlayer()
     {
-        // Launch the DeviceListActivity to see devices and do scan
-        Intent serverIntent = new Intent(this, RemoteMp3ModeActivity.class);
-        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+     mediaPlayer = new  MediaPlayer();
+     //filename = 
+     //Uri File = Uri.parse("file://"+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)+"/"+fileName);
+
+     
+        mediaPlayer = MediaPlayer.create(BlueTunes.this, R.raw.musictest);
+        stateMediaPlayer = stateMP_NotStarter;
+        textState.setText("- IDLE -");
     }
 
+    public void playMusic(View view)
+    {
+      // TODO Auto-generated method stub
+      switch(stateMediaPlayer){
+      	case stateMP_NotStarter:
+      		mediaPlayer.start();
+      		playMusicButton.setText("Pause");
+      		textState.setText("- PLAYING -");
+      		stateMediaPlayer = stateMP_Playing;
+      		// Send Bluetooth command to play song on slave phone.
+      		sendMessage("Play");
+      		break;
+      	case stateMP_Playing:
+      		mediaPlayer.pause();
+      		playMusicButton.setText("Play");
+      		textState.setText("- PAUSING -");
+      		stateMediaPlayer = stateMP_Pausing;
+      		sendMessage("Play");
+      		break;
+      	case stateMP_Pausing:
+      		mediaPlayer.start();
+      		playMusicButton.setText("Pause");
+      		textState.setText("- PLAYING -");
+      		stateMediaPlayer = stateMP_Playing;
+      		sendMessage("Play");
+      		break;
+      }
+
+    };
+
+    public void playMusicSlave(View view)
+    {
+      // TODO Auto-generated method stub
+      switch(stateMediaPlayer){
+      	case stateMP_NotStarter:
+      		mediaPlayer.start();
+      		playMusicButton.setText("Pause");
+      		textState.setText("- PLAYING -");
+      		stateMediaPlayer = stateMP_Playing;
+      		break;
+      	case stateMP_Playing:
+      		mediaPlayer.pause();
+      		playMusicButton.setText("Play");
+      		textState.setText("- PAUSING -");
+      		stateMediaPlayer = stateMP_Pausing;
+      		break;
+      	case stateMP_Pausing:
+      		mediaPlayer.start();
+      		playMusicButton.setText("Pause");
+      		textState.setText("- PLAYING -");
+      		stateMediaPlayer = stateMP_Playing;
+      		break;
+      }
+
+    };
+    
+    public void quit(View view)
+    {
+    	mediaPlayer.stop();
+        mediaPlayer.release();
+        sendMessage("Quit");
+        finish();
+    }
+    
+    public void quitSlave(View view)
+    {
+    	mediaPlayer.stop();
+        mediaPlayer.release();
+        finish();
+    }
+    
     
     @Override
     public void onStart() {
@@ -241,8 +333,8 @@ public class BlueTunes extends Activity {
             mChatService.write(send);
 
             // Reset out string buffer to zero and clear the edit text field
-            mOutStringBuffer.setLength(0);
-            mOutEditText.setText(mOutStringBuffer);
+//            mOutStringBuffer.setLength(0);
+//            mOutEditText.setText(mOutStringBuffer);
         }
     }
 
@@ -292,6 +384,10 @@ public class BlueTunes extends Activity {
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
+                if (readMessage.equals("Play"))
+                	playMusicSlave(findViewById(R.id.playmusic));
+                if (readMessage.equals("Quit"))
+                	quitSlave(findViewById(R.id.playmusic));
 //                mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                 break;
             case MESSAGE_DEVICE_NAME:

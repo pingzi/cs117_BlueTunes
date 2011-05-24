@@ -17,16 +17,14 @@ public final class R {
     }
     public static final class id {
         public static final int button_scan=0x7f070006;
-        public static final int discoverable=0x7f07000f;
+        public static final int discoverable=0x7f07000d;
         public static final int finddevices=0x7f070009;
         public static final int new_devices=0x7f070005;
         public static final int paired_devices=0x7f070003;
         public static final int playmusic=0x7f070008;
-        public static final int playpause=0x7f07000b;
-        public static final int quit=0x7f07000c;
-        public static final int remotemp3mode=0x7f07000a;
-        public static final int scan=0x7f07000e;
-        public static final int state=0x7f07000d;
+        public static final int quit=0x7f07000a;
+        public static final int scan=0x7f07000c;
+        public static final int state=0x7f07000b;
         public static final int title=0x7f070007;
         public static final int title_left_text=0x7f070000;
         public static final int title_new_devices=0x7f070004;
@@ -39,7 +37,6 @@ public final class R {
         public static final int device_name=0x7f030002;
         public static final int main=0x7f030003;
         public static final int message=0x7f030004;
-        public static final int remotemp3mode=0x7f030005;
     }
     public static final class menu {
         public static final int option_menu=0x7f060000;
